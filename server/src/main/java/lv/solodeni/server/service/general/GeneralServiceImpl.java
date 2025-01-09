@@ -23,4 +23,12 @@ public class GeneralServiceImpl implements IGeneralService {
         return json;
     }
 
+    @Override
+    public LinkedHashMap<String, Object> showCreateTableScript(String tableName) {
+        String result = repo.getCreateTableScript(tableName);
+        LinkedHashMap<String, Object> json = new LinkedHashMap<>();
+        json.put("script", result);
+        return json;
+    }
+
 }

@@ -1,8 +1,10 @@
 package lv.solodeni.server.repository;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import java.util.List;
 
-import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -25,13 +27,37 @@ public class GeneralRepo {
     }
 
     public String getCreateTableScript(String tableName) {
-        String sql = "SHOW CREATE TABLE " + tableName;
-        String test;
-        try {
-            test = template.query(sql, (rs, rowNum) -> rs.getString("Create Table")).get(0);
-        } catch (BadSqlGrammarException e) {
+        List<String> tableNames = getAllTableNames();
+
+        if (!tableNames.contains(tableName))
             throw new InvalidTableNameException("There is table with the name of " + tableName);
+
+        String sql = "SHOW CREATE TABLE " + tableName;
+        return template.query(sql, (rs, rowNum) -> rs.getString("Create Table")).get(0);
+    }
+
+    public String getInsertTableScript(String tableName) throws Exception {
+        List<String> tableNames = getAllTableNames();
+
+        if (!tableNames.contains(tableName))
+            throw new InvalidTableNameException("There is table with the name of " + tableName);
+
+        List<String> lines = Files.readAllLines(Paths.get(ClassLoader.getSystemResource("db/init/data.sql").toURI()))
+                .stream().map(line -> line + "{{ END OF LINE }}").toList();
+
+        String insertQuery = "";
+        boolean addFromNowOn = false;
+        for (String line : lines) {
+            if (line.contains(tableName))
+                addFromNowOn = true;
+
+            if (addFromNowOn)
+                insertQuery += line.replace("{{ END OF LINE }}", "");
+
+            if (addFromNowOn && line.contains(";{{ END OF LINE }}"))
+                break;
+
         }
-        return test;
+        return insertQuery;
     }
 }

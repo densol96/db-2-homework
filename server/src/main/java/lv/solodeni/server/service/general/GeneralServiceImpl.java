@@ -31,4 +31,12 @@ public class GeneralServiceImpl implements IGeneralService {
         return json;
     }
 
+    @Override
+    public LinkedHashMap<String, Object> showInsertTableScript(String tableName) throws Exception {
+        String result = repo.getInsertTableScript(tableName);
+        LinkedHashMap<String, Object> json = new LinkedHashMap<>();
+        json.put("script", result);
+        return json;
+    }
+
 }

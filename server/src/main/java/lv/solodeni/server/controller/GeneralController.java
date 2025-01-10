@@ -33,4 +33,10 @@ public class GeneralController {
         return new ResponseEntity<>(service.showCreateTableScript(tableName), HttpStatus.OK);
     }
 
+    @GetMapping("/tables-insert-script")
+    public ResponseEntity<Map<String, Object>> getInsertScript(
+            @RequestParam(value = "name", required = true) String tableName) throws Exception {
+        return new ResponseEntity<>(service.showInsertTableScript(tableName), HttpStatus.OK);
+    }
+
 }

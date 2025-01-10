@@ -16,4 +16,14 @@ public class GlobalErrorHandler {
     public ResponseEntity<ErrorDto> badSqlInput(InvalidTableNameException e) {
         return new ResponseEntity<>(new ErrorDto(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDto> unexpected(Exception e) {
+        System.out.println("===========================================");
+        System.out.println("UNEXPECTED EXCEPTION:");
+        System.out.println(e.getMessage());
+        e.printStackTrace();
+        System.out.println("===========================================");
+        return new ResponseEntity<>(new ErrorDto("Service is currently unavailable"), HttpStatus.SERVICE_UNAVAILABLE);
+    }
 }

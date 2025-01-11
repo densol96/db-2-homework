@@ -1,13 +1,9 @@
 package lv.solodeni.server.repository;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.ResultSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -45,6 +41,16 @@ public class GeneralRepo {
     public List<LinkedHashMap<String, Object>> getAll(String tableName) {
         String sql = "SELECT * FROM " + tableName;
         return template.query(sql, dataMapper.getModel(tableName));
+    }
+
+    public List<LinkedHashMap<String, Object>> getByPage(String tableName, Integer offset, Integer limit) {
+        String sql = "SELECT * FROM " + tableName + " LIMIT " + limit + " OFFSET " + offset;
+        return template.query(sql, dataMapper.getModel(tableName));
+    }
+
+    public Integer countRows(String tableName) {
+        String sql = "SELECT COUNT(*) AS total FROM " + tableName;
+        return template.query(sql, (rs, intRow) -> rs.getInt("total")).get(0);
     }
 
 }

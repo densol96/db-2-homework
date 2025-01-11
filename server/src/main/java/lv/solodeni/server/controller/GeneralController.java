@@ -42,8 +42,10 @@ public class GeneralController {
     }
 
     @GetMapping("/tables/{tableName}")
-    public ResponseEntity<Object> getTableContent(@PathVariable String tableName) {
-        return new ResponseEntity<>(service.getAll(tableName), HttpStatus.OK);
+    public ResponseEntity<Object> getTableContent(@PathVariable String tableName,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "rowsPerPage", required = false) Integer rowsPerPage) {
+        return new ResponseEntity<>(service.getAll(tableName, page, rowsPerPage), HttpStatus.OK);
     }
 
 }

@@ -10,5 +10,5 @@ public interface IGeneralService {
 
     Map<String, Object> showInsertTableScript(String tableName) throws Exception;
 
-    List<Map<String, Object>> getAll(String tableName);
+    List<Map<String, Object>> getAll(String tableName, Integer page, Integer rowsPerPage);
 }

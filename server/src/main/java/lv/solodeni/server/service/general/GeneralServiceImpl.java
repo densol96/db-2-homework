@@ -2,6 +2,7 @@ package lv.solodeni.server.service.general;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import lv.solodeni.server.exception.InvalidPageNumException;
 import lv.solodeni.server.exception.InvalidTableNameException;
 import lv.solodeni.server.repository.GeneralRepo;
 
@@ -71,13 +73,26 @@ public class GeneralServiceImpl implements IGeneralService {
     }
 
     @Override
-    public List<Map<String, Object>> getAll(String tableName) {
-        List<String> tableNames = repo.getAllTableNames();
+    public List<Map<String, Object>> getAll(String tableName, Integer page, Integer rowsPerPage) {
 
+        final int DEFAULT_ROWS_PER_PAGE = 5;
+
+        List<String> tableNames = repo.getAllTableNames();
         if (!tableNames.contains(tableName))
             throw new InvalidTableNameException("There is table with the name of " + tableName);
 
-        return repo.getAll(tableName).stream().map((jsonData) -> (Map<String, Object>) jsonData).toList();
+        int totalResults = repo.countRows(tableName);
+        rowsPerPage = (rowsPerPage != null ? rowsPerPage : DEFAULT_ROWS_PER_PAGE);
+        int pagesTotal = (int) Math.ceil(totalResults / (double) rowsPerPage);
+
+        if (page != null && (page < 1 || page > pagesTotal))
+            throw new InvalidPageNumException(
+                    "Ivalid page namber of " + page + " (total pages: %%)".replace("%%", "" + pagesTotal));
+
+        return (page == null
+                ? repo.getAll(tableName)
+                : repo.getByPage(tableName, (page - 1) * rowsPerPage, rowsPerPage))
+                .stream().map((jsonData) -> (Map<String, Object>) jsonData).toList();
     }
 
 }

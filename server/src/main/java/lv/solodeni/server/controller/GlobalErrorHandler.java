@@ -1,6 +1,10 @@
 package lv.solodeni.server.controller;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -22,11 +26,32 @@ public class GlobalErrorHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorDto> badSfkConstraintViolationqlInput(Exception e) {
+    public ResponseEntity<Map> badSfkConstraintViolationqlInput(Exception e) {
+        String message = e.getMessage();
+
         System.out.println("===========================================");
-        System.out.println(e.getMessage());
+        System.out.println(message);
         System.out.println("===========================================");
-        return new ResponseEntity<>(new ErrorDto(e.getMessage()), HttpStatus.BAD_REQUEST);
+
+        String[] arr = message.split(";");
+        String reason = arr[arr.length - 1].trim();
+
+        Map<String, String> response = new LinkedHashMap<>();
+        response.put("isDataViolation", "true");
+        response.put("message",
+                "Your provided input has invalid format / value. Please, check the DB schema and try again!");
+        response.put("reason", reason);
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    public ResponseEntity<ErrorDto> missingFields(Exception e) {
+        // e.getMessage(): "No value supplied for the SQL parameter 'role': No value
+        // registered for key 'role'"
+        String missingFieldName = e.getMessage().split(":")[1].split("'")[1];
+        return new ResponseEntity<>(new ErrorDto("No value supplied for the field: " + missingFieldName),
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

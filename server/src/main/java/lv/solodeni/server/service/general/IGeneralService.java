@@ -13,4 +13,6 @@ public interface IGeneralService {
     List<Map<String, Object>> getAll(String tableName, Integer page, Integer rowsPerPage);
 
     Map<String, Object> deleteById(String tableName, Integer id);
+
+    Map<String, Object> insertNew(String tableName, Map<String, Object> entity);
 }

@@ -109,4 +109,13 @@ public class GeneralServiceImpl implements IGeneralService {
         return json;
     }
 
+    @Override
+    public Map<String, Object> insertNew(String tableName, Map<String, Object> entity) {
+        int rowsAffected = repo.createNew(tableName, entity);
+        var json = new LinkedHashMap<String, Object>();
+        json.put("status", rowsAffected == 1 ? "success" : "error");
+        json.put("rowsAffected", rowsAffected);
+        return json;
+    }
+
 }

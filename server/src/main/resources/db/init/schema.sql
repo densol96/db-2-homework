@@ -36,18 +36,22 @@ CREATE TABLE `tags` (
 );
 
 CREATE TABLE `articles_tags` (
+    `id` INT AUTO_INCREMENT,
     `article_id` INT,
     `tag_id` INT,
-    PRIMARY KEY (`article_id`, `tag_id`),
+    PRIMARY KEY (`id`),
+    UNIQUE (`article_id`, `tag_id`),
     FOREIGN KEY (`article_id`) REFERENCES `articles`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`tag_id`) REFERENCES `tags`(`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE users_articles_ratings (
+    `id` INT AUTO_INCREMENT,
     `article_id` INT,
     `user_id` INT,
     `rating` INT NOT NULL CHECK (`rating` >= 1 AND `rating` <= 5),
-    PRIMARY KEY (`article_id`, `user_id`),
+    PRIMARY KEY (`id`),
+    UNIQUE (`article_id`, `user_id`),
     FOREIGN KEY (`article_id`) REFERENCES `articles`(`id`),
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
 );
@@ -66,9 +70,11 @@ CREATE TABLE `comments` (
 );
 
 CREATE TABLE `likes_per_comment` (
+    `id` INT AUTO_INCREMENT,
     `comment_id` INT,
     `user_id` INT,
-    PRIMARY KEY (`comment_id`, `user_id`),
+    PRIMARY KEY(`id`),
+    UNIQUE (`comment_id`, `user_id`),
     FOREIGN KEY (`comment_id`) REFERENCES `comments`(`id`),
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
 );

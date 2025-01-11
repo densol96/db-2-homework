@@ -1,5 +1,6 @@
 package lv.solodeni.server.repository;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -51,6 +52,11 @@ public class GeneralRepo {
     public Integer countRows(String tableName) {
         String sql = "SELECT COUNT(*) AS total FROM " + tableName;
         return template.query(sql, (rs, intRow) -> rs.getInt("total")).get(0);
+    }
+
+    public Integer deleteById(String tableName, Integer id) {
+        String sql = "DELETE FROM `" + tableName + "` WHERE id = " + id;
+        return template.update(sql, new HashMap<>());
     }
 
 }

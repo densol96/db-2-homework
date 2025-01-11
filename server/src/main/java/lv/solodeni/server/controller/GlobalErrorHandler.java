@@ -1,5 +1,6 @@
 package lv.solodeni.server.controller;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -7,14 +8,24 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import lv.solodeni.server.dto.ErrorDto;
+import lv.solodeni.server.exception.InvalidIdException;
 import lv.solodeni.server.exception.InvalidPageNumException;
 import lv.solodeni.server.exception.InvalidTableNameException;
 
 @RestControllerAdvice
 public class GlobalErrorHandler {
 
-    @ExceptionHandler({ InvalidTableNameException.class, InvalidPageNumException.class })
+    @ExceptionHandler({ InvalidTableNameException.class, InvalidPageNumException.class, InvalidIdException.class })
     public ResponseEntity<ErrorDto> badSqlInput(Exception e) {
+        e.printStackTrace();
+        return new ResponseEntity<>(new ErrorDto(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorDto> badSfkConstraintViolationqlInput(Exception e) {
+        System.out.println("===========================================");
+        System.out.println(e.getMessage());
+        System.out.println("===========================================");
         return new ResponseEntity<>(new ErrorDto(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 

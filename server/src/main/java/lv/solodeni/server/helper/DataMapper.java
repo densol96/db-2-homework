@@ -18,7 +18,7 @@ public class DataMapper {
                 return mapDataToArticle();
             case "tags":
                 return mapDataToTag();
-            case "articles_tags mapper":
+            case "articles_tags":
                 return mapDataToArticleTag();
             case "users_articles_ratings":
                 return mapDataToUserArticleRating();

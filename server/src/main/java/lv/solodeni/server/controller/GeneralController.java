@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,6 +47,11 @@ public class GeneralController {
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "rowsPerPage", required = false) Integer rowsPerPage) {
         return new ResponseEntity<>(service.getAll(tableName, page, rowsPerPage), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/tables/{tableName}/{id}")
+    public ResponseEntity<Object> getTableContent(@PathVariable String tableName, @PathVariable Integer id) {
+        return new ResponseEntity<>(service.deleteById(tableName, id), HttpStatus.OK);
     }
 
 }

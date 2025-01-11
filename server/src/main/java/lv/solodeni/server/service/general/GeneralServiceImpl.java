@@ -10,6 +10,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import lv.solodeni.server.exception.InvalidIdException;
 import lv.solodeni.server.exception.InvalidPageNumException;
 import lv.solodeni.server.exception.InvalidTableNameException;
 import lv.solodeni.server.repository.GeneralRepo;
@@ -93,6 +94,19 @@ public class GeneralServiceImpl implements IGeneralService {
                 ? repo.getAll(tableName)
                 : repo.getByPage(tableName, (page - 1) * rowsPerPage, rowsPerPage))
                 .stream().map((jsonData) -> (Map<String, Object>) jsonData).toList();
+    }
+
+    @Override
+    public Map<String, Object> deleteById(String tableName, Integer id) {
+        if (id == null || id < 0)
+            throw new InvalidIdException("Invalid id of " + id);
+        if (!repo.getAllTableNames().contains(tableName))
+            throw new InvalidTableNameException("There is table with the name of " + tableName);
+        int rowsAffected = repo.deleteById(tableName, id);
+        var json = new LinkedHashMap<String, Object>();
+        json.put("status", rowsAffected == 1 ? "success" : "error");
+        json.put("rowsAffected", rowsAffected);
+        return json;
     }
 
 }

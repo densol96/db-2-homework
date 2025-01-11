@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import lv.solodeni.server.dto.ErrorDto;
 import lv.solodeni.server.exception.InvalidIdException;
@@ -52,6 +54,12 @@ public class GlobalErrorHandler {
         String missingFieldName = e.getMessage().split(":")[1].split("'")[1];
         return new ResponseEntity<>(new ErrorDto("No value supplied for the field: " + missingFieldName),
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({ MethodArgumentTypeMismatchException.class, NoResourceFoundException.class })
+    public ResponseEntity<ErrorDto> invalidUrlPath(Exception e) {
+        return new ResponseEntity<>(new ErrorDto("Invalid URL path. Re-check and try again!"),
+                HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     @ExceptionHandler(Exception.class)

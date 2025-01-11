@@ -15,4 +15,6 @@ public interface IGeneralService {
     Map<String, Object> deleteById(String tableName, Integer id);
 
     Map<String, Object> insertNew(String tableName, Map<String, Object> entity);
+
+    Map<String, Object> getAndExecuteQuery(Integer queryNum) throws Exception;
 }

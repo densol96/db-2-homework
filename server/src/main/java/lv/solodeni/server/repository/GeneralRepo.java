@@ -75,6 +75,19 @@ public class GeneralRepo {
         }
     }
 
+    public List<Object> runQuery(String sql) {
+        return template.query(sql, (rs, rowNum) -> {
+            int columnCount = rs.getMetaData().getColumnCount();
+            Map<String, Object> row = new LinkedHashMap<>();
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = rs.getMetaData().getColumnLabel(i);
+                Object columnValue = rs.getObject(i);
+                row.put(columnName, columnValue);
+            }
+            return row;
+        });
+    }
+
     private String selectInsertQuery(String tableName) {
         switch (tableName) {
             case "users":

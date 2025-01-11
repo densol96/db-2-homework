@@ -118,4 +118,17 @@ public class GeneralServiceImpl implements IGeneralService {
         return json;
     }
 
+    @Override
+    public Map<String, Object> getAndExecuteQuery(Integer queryNum) throws Exception {
+        if (queryNum < 1 || queryNum > 10)
+            throw new InvalidIdException("Invalid query number. Only 1-10 are available for query.");
+        String fileName = queryNum + ".sql";
+        String script = Files.readString(Paths.get(ClassLoader.getSystemResource("db/queries/" + fileName).toURI()));
+        List<Object> result = repo.runQuery(script);
+        Map<String, Object> json = new LinkedHashMap<>();
+        json.put("script", script);
+        json.put("result", result);
+        return json;
+    }
+
 }

@@ -63,4 +63,9 @@ public class GeneralController {
         return new ResponseEntity<>(service.insertNew(tableName, entity), HttpStatus.OK);
     }
 
+    @GetMapping("/queries/{queryNum}")
+    public ResponseEntity<Object> getAndExecuteQuery(@PathVariable Integer queryNum) throws Exception {
+        return new ResponseEntity<>(service.getAndExecuteQuery(queryNum), HttpStatus.OK);
+    }
+
 }

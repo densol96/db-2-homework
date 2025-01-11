@@ -1,5 +1,6 @@
 package lv.solodeni.server.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lv.solodeni.server.service.general.IGeneralService;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -37,6 +39,11 @@ public class GeneralController {
     public ResponseEntity<Map<String, Object>> getInsertScript(
             @RequestParam(value = "name", required = true) String tableName) throws Exception {
         return new ResponseEntity<>(service.showInsertTableScript(tableName), HttpStatus.OK);
+    }
+
+    @GetMapping("/tables/{tableName}")
+    public ResponseEntity<Object> getTableContent(@PathVariable String tableName) {
+        return new ResponseEntity<>(service.getAll(tableName), HttpStatus.OK);
     }
 
 }

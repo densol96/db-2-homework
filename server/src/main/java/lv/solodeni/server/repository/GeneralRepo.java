@@ -2,21 +2,24 @@ package lv.solodeni.server.repository;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
+import java.sql.ResultSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
-import lv.solodeni.server.exception.InvalidTableNameException;
+import lv.solodeni.server.helper.DataMapper;
 
 @Repository
 @RequiredArgsConstructor
 public class GeneralRepo {
 
     private final NamedParameterJdbcTemplate template;
+    private final DataMapper dataMapper;
 
     @Value("${spring.datasource.url}")
     private String dataSourceUrl;
@@ -35,37 +38,13 @@ public class GeneralRepo {
     }
 
     public String getCreateTableScript(String tableName) {
-        List<String> tableNames = getAllTableNames();
-
-        if (!tableNames.contains(tableName))
-            throw new InvalidTableNameException("There is table with the name of " + tableName);
-
         String sql = "SHOW CREATE TABLE " + tableName;
         return template.query(sql, (rs, rowNum) -> rs.getString("Create Table")).get(0);
     }
 
-    public String getInsertTableScript(String tableName) throws Exception {
-        List<String> tableNames = getAllTableNames();
-
-        if (!tableNames.contains(tableName))
-            throw new InvalidTableNameException("There is table with the name of " + tableName);
-
-        List<String> lines = Files.readAllLines(Paths.get(ClassLoader.getSystemResource("db/init/data.sql").toURI()))
-                .stream().map(line -> line + "{{ END OF LINE }}").toList();
-
-        String insertQuery = "";
-        boolean addFromNowOn = false;
-        for (String line : lines) {
-            if (line.contains(tableName))
-                addFromNowOn = true;
-
-            if (addFromNowOn)
-                insertQuery += line.replace("{{ END OF LINE }}", "");
-
-            if (addFromNowOn && line.contains(";{{ END OF LINE }}"))
-                break;
-
-        }
-        return insertQuery;
+    public List<LinkedHashMap<String, Object>> getAll(String tableName) {
+        String sql = "SELECT * FROM " + tableName;
+        return template.query(sql, dataMapper.getModel(tableName));
     }
+
 }

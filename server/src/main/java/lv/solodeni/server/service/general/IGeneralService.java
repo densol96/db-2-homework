@@ -1,11 +1,14 @@
 package lv.solodeni.server.service.general;
 
-import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public interface IGeneralService {
-    LinkedHashMap<String, Object> getAllTableNames();
+    Map<String, Object> getAllTableNames();
 
-    LinkedHashMap<String, Object> showCreateTableScript(String tableName);
+    Map<String, Object> showCreateTableScript(String tableName);
 
-    LinkedHashMap<String, Object> showInsertTableScript(String tableName) throws Exception;
+    Map<String, Object> showInsertTableScript(String tableName) throws Exception;
+
+    List<Map<String, Object>> getAll(String tableName);
 }

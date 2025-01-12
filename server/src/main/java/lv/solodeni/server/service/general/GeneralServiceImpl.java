@@ -1,5 +1,7 @@
 package lv.solodeni.server.service.general;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -10,8 +12,8 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import lv.solodeni.server.exception.InvalidIdException;
-import lv.solodeni.server.exception.InvalidPageNumException;
+import lv.solodeni.server.exception.GeneralException;
+import lv.solodeni.server.exception.InvalidInputException;
 import lv.solodeni.server.exception.InvalidTableNameException;
 import lv.solodeni.server.repository.GeneralRepo;
 
@@ -87,7 +89,7 @@ public class GeneralServiceImpl implements IGeneralService {
         int pagesTotal = (int) Math.ceil(totalResults / (double) rowsPerPage);
 
         if (page != null && (page < 1 || page > pagesTotal))
-            throw new InvalidPageNumException(
+            throw new InvalidInputException(
                     "Ivalid page namber of " + page + " (total pages: %%)".replace("%%", "" + pagesTotal));
 
         return (page == null
@@ -99,7 +101,7 @@ public class GeneralServiceImpl implements IGeneralService {
     @Override
     public Map<String, Object> deleteById(String tableName, Integer id) {
         if (id == null || id < 0)
-            throw new InvalidIdException("Invalid id of " + id);
+            throw new InvalidInputException("Invalid id of " + id);
         if (!repo.getAllTableNames().contains(tableName))
             throw new InvalidTableNameException("There is table with the name of " + tableName);
         int rowsAffected = repo.deleteById(tableName, id);
@@ -119,16 +121,55 @@ public class GeneralServiceImpl implements IGeneralService {
     }
 
     @Override
-    public Map<String, Object> getAndExecuteQuery(Integer queryNum) throws Exception {
+    public Map<String, Object> getAndExecuteQuery(Integer queryNum) {
         if (queryNum < 1 || queryNum > 10)
-            throw new InvalidIdException("Invalid query number. Only 1-10 are available for query.");
+            throw new InvalidInputException("Invalid query number. Only 1-10 are available for query.");
         String fileName = queryNum + ".sql";
-        String script = Files.readString(Paths.get(ClassLoader.getSystemResource("db/queries/" + fileName).toURI()));
-        List<Object> result = repo.runQuery(script);
-        Map<String, Object> json = new LinkedHashMap<>();
-        json.put("script", script);
-        json.put("result", result);
-        return json;
+        try {
+            String script = Files
+                    .readString(Paths.get(ClassLoader.getSystemResource("db/queries/" + fileName).toURI()));
+            List<Object> result = repo.runQuery(script);
+            Map<String, Object> json = new LinkedHashMap<>();
+            json.put("script", script);
+            json.put("result", result);
+            return json;
+        } catch (Exception e) {
+            // error logging will happen in global handler and general message sent to
+            // client
+            throw new GeneralException(e.getMessage());
+        }
     }
 
+    @Override
+    public Map<String, Object> getTriggerInfo(Integer triggerNum) {
+        if (triggerNum < 1 || triggerNum > 3)
+            throw new InvalidInputException("Invalid trigger number. Only 1-3 are available.");
+
+        String fileName = triggerNum + ".sql";
+        try {
+            String script = Files
+                    .readString(Paths.get(ClassLoader.getSystemResource("db/triggers/" + fileName).toURI()));
+            Map<String, Object> json = new LinkedHashMap<>();
+            json.put("script", script);
+            json.put("info", getTriggerDescription(triggerNum));
+            return json;
+        } catch (IOException | URISyntaxException e) {
+            // error logging will happen in global handler and general message sent to
+            // client
+            throw new GeneralException(e.getMessage());
+        }
+    }
+
+    private String getTriggerDescription(Integer triggerNum) {
+        switch (triggerNum) {
+            case 1:
+                return "Šis triggers tiek izveidots, lai pēc ieraksta dzēšanas no users tabulas automātiski ierakstītu dzēsto lietotāju datus users_backup tabulā.";
+            case 2:
+                return "Šis triggers tiek izveidots, lai pirms jauna lietotāja ieraksta pievienošanas users tabulā pārbaudītu, vai role vērtība ir derīga. Ja loma ir admin vai editor, tiek automātiski iestatīts email_is_confirmed uz TRUE, citādi uz FALSE.";
+            case 3:
+                return "Šis triggers tiek izveidots, lai pēc jauna ieraksta pievienošanas users_articles_ratings tabulā automātiski aprēķinātu un atjauninātu raksta vidējo vērtējumu articles tabulā. Pēc katras jaunas atsauksmes tiek aprēķināts visu atsauksmju skaits un to vērtējumu summa, lai iegūtu jaunu vidējo vērtējumu rakstam.";
+            default:
+                throw new InvalidInputException("Invalid trigger number. Only 1-3 are available.");
+        }
+    }
 }

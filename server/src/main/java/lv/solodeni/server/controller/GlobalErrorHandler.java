@@ -14,14 +14,13 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import lv.solodeni.server.dto.ErrorDto;
-import lv.solodeni.server.exception.InvalidIdException;
-import lv.solodeni.server.exception.InvalidPageNumException;
+import lv.solodeni.server.exception.InvalidInputException;
 import lv.solodeni.server.exception.InvalidTableNameException;
 
 @RestControllerAdvice
 public class GlobalErrorHandler {
 
-    @ExceptionHandler({ InvalidTableNameException.class, InvalidPageNumException.class, InvalidIdException.class })
+    @ExceptionHandler({ InvalidTableNameException.class, InvalidInputException.class })
     public ResponseEntity<ErrorDto> badSqlInput(Exception e) {
         e.printStackTrace();
         return new ResponseEntity<>(new ErrorDto(e.getMessage()), HttpStatus.BAD_REQUEST);

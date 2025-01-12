@@ -68,4 +68,9 @@ public class GeneralController {
         return new ResponseEntity<>(service.getAndExecuteQuery(queryNum), HttpStatus.OK);
     }
 
+    @GetMapping("/triggers/{triggerNum}")
+    public ResponseEntity<Object> getTriggerScript(@PathVariable Integer triggerNum) throws Exception {
+        return new ResponseEntity<>(service.getTriggerInfo(triggerNum), HttpStatus.OK);
+    }
+
 }

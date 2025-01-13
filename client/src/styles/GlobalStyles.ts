@@ -10,7 +10,7 @@ export default createGlobalStyle`
 
     /* FONTS */
     --color-text: rgba(255, 255, 245, 0.86);
-    --color-text-grey: rgba(240, 186, 192, 0.718);
+    --color-text-grey: rgba(235, 235, 245, 0.6);
     --color-active: rgb(246, 115, 115);
 
 }
@@ -67,5 +67,10 @@ ul {
 
 img {
   max-width: 100%;
+}
+
+.container {
+    max-width: 110rem;
+    width: 100%;
 }
 `;

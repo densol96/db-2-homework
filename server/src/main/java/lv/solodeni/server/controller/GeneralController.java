@@ -73,4 +73,9 @@ public class GeneralController {
         return new ResponseEntity<>(service.getTriggerInfo(triggerNum), HttpStatus.OK);
     }
 
+    @GetMapping("/procedures/{procedureNum}")
+    public ResponseEntity<Object> proceduresController(@PathVariable Integer procedureNum) throws Exception {
+        return new ResponseEntity<>(service.getProcedure(procedureNum), HttpStatus.OK);
+    }
+
 }

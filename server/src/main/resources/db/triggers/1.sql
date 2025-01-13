@@ -13,6 +13,8 @@ BEGIN
         OLD.id, OLD.email, OLD.username, OLD.password, OLD.role,
         OLD.email_is_confirmed, OLD.join_date, OLD.last_online
     );
+
+    CALL log_trigger('like_delete_user', TRUE);
 END$$
 
 DELIMITER ;

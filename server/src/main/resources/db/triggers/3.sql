@@ -21,6 +21,8 @@ BEGIN
         SET rating_average = sum / total
         WHERE id = NEW.article_id;
     END IF;
+
+    CALL log_trigger('update_article_rating_avg', TRUE);
 END$$
 
 DELIMITER ;

@@ -4,13 +4,20 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.sql.Types;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import lv.solodeni.server.exception.InvalidInputException;
 import lv.solodeni.server.exception.InvalidTableNameException;
 import lv.solodeni.server.helper.DataMapper;
 
@@ -86,6 +93,30 @@ public class GeneralRepo {
             }
             return row;
         });
+    }
+
+    @Transactional
+    public String callProcedure(Integer procedureNum) {
+        template.execute("CALL get_article_rating(1, @result)", (ps) -> ps.execute());
+        template.query("SELECT @result AS result", (rs, intRow) -> {
+            System.out.println(rs.getDouble("result"));
+            return "testing";
+        });
+        return "in testing";
+    }
+
+    private String getProcedureScript(Integer procedureNum) {
+        switch (procedureNum) {
+            case 1:
+                return "CALL get_article_rating(:articleId, :result)";
+            case 2:
+                return "CALL get_article_rating(:articleId, :result)";
+            case 3:
+                return "CALL get_article_rating(:articleId, :result)";
+            default:
+                throw new InvalidInputException("Invalid trigger number. Only 1-3 are available.");
+
+        }
     }
 
     private String selectInsertQuery(String tableName) {

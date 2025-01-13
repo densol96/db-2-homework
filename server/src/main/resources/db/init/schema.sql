@@ -93,3 +93,12 @@ CREATE TABLE `users_backup` (
     `last_online` DATETIME,
     PRIMARY KEY(`id`)
 );
+
+CREATE TABLE `trigger_logs` (
+    `id` INT AUTO_INCREMENT,
+    `when` ENUM('BEFORE', 'AFTER'),
+    `type` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
+    `name` VARCHAR(50) NOT NULL,
+    `datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(`id`)
+);

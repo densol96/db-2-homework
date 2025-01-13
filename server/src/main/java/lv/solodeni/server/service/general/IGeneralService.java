@@ -19,4 +19,6 @@ public interface IGeneralService {
     Map<String, Object> getAndExecuteQuery(Integer queryNum);
 
     Map<String, Object> getTriggerInfo(Integer triggerNum);
+
+    Map<String, Object> getProcedure(Integer procedureNum);
 }

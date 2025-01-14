@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import GlobalStyles from "./styles/GlobalStyles.ts";
-import { Layout } from "./ui/Layout.tsx";
-import { Home } from "./pages/Home.tsx";
-import { ThemeProvider } from "./context/ThemeContext.tsx";
+import GlobalStyles from "@/styles/GlobalStyles";
+import { Layout } from "@/ui/Layout";
+import { Home } from "@/pages/Home";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {

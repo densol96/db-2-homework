@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { createContext } from "react";
-import useLocalStorageAsState from "../hooks/useLocalStorageAsState.ts";
+import useLocalStorageAsState from "@/hooks/useLocalStorageAsState";
 
 type ThemeType = "dark" | "light";
 

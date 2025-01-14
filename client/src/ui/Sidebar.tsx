@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { Logo } from "./Logo.tsx";
-import { NavElement } from "./NavElement.tsx";
+import { Logo } from "./Logo";
+import { NavElement } from "./NavElement";
 
 const StyledSidebar = styled.aside`
   background-color: var(--color-bg-primary);

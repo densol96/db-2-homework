@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS `tags`;
 DROP TABLE IF EXISTS `articles`;
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `users_backup`;
+DROP TABLE IF EXISTS `trigger_logs`;
 
 CREATE TABLE `users` (
     `id` INT AUTO_INCREMENT,

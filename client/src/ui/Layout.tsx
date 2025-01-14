@@ -1,8 +1,8 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
-import { Sidebar } from "./Sidebar.tsx";
-import { Header } from "./Header.tsx";
+import { Sidebar } from "./Sidebar";
+import { Header } from "./Header";
 
 const StyledLayout = styled.div`
   min-height: 100vh;

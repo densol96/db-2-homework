@@ -1,5 +1,5 @@
 import React from "react";
-import Heading from "../ui/Heading.tsx";
+import Heading from "@/ui/Heading";
 
 type Props = {
   className?: string;

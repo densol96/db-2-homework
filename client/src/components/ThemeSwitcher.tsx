@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ThemeType, useThemeContext } from "../context/ThemeContext.tsx";
+import { ThemeType, useThemeContext } from "@/context/ThemeContext";
 import styled, { css } from "styled-components";
 import { MdOutlineLightMode } from "react-icons/md";
 import { MdOutlineDarkMode } from "react-icons/md";

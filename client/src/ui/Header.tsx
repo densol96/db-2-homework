@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { ThemeSwitcher } from "../components/ThemeSwitcher.tsx";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 const StyledHeader = styled.header`
   height: 6.4rem;

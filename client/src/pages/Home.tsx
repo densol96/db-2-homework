@@ -1,9 +1,14 @@
 import React from "react";
+import Heading from "../ui/Heading.tsx";
 
 type Props = {
   className?: string;
 };
 
 export const Home: React.FC<Props> = ({ className }) => {
-  return <div className={className}>THIS IS A HOME PAGE!</div>;
+  return (
+    <>
+      <Heading as="h1">Ievads</Heading>
+    </>
+  );
 };

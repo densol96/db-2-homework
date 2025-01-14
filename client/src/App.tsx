@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import GlobalStyles from "./styles/GlobalStyles.ts";
 import { Layout } from "./ui/Layout.tsx";
 import { Home } from "./pages/Home.tsx";
+import { ThemeProvider } from "./context/ThemeContext.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,7 +21,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <ThemeProvider>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools />
         <GlobalStyles />
@@ -32,7 +33,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
-    </>
+    </ThemeProvider>
   );
 }
 

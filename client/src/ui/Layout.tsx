@@ -10,22 +10,25 @@ const StyledLayout = styled.div`
   grid-template-columns: 25% 1fr;
 `;
 
-const Content = styled.div`
+const MainArea = styled.div`
   background-color: var(--color-bg-secondary);
 `;
 
-const Main = styled.div``;
+const Main = styled.div`
+  border: 1px solid red;
+  padding: 4.8rem 6.4rem 4.8rem 12.8rem;
+`;
 
 export const Layout = () => {
   return (
     <StyledLayout>
       <Sidebar />
-      <Content>
+      <MainArea>
         <Header />
-        <Main>
+        <Main className="container">
           <Outlet />
         </Main>
-      </Content>
+      </MainArea>
     </StyledLayout>
   );
 };

@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Logo } from "./Logo";
 import { NavElement } from "./NavElement";
+import { Api } from "@/services/aoi-client";
+import { ApiRoutes } from "@/services/constants";
+import { useQuery } from "@tanstack/react-query";
+import useTables from "@/features/tables/useTables";
 
 const StyledSidebar = styled.aside`
   background-color: var(--color-bg-primary);
@@ -25,6 +29,8 @@ const NavList = styled.ul`
 `;
 
 export const Sidebar = () => {
+  const { tableNames, isSuccess } = useTables();
+
   return (
     <StyledSidebar>
       <Content>
@@ -34,8 +40,10 @@ export const Sidebar = () => {
         <NavList>
           <NavElement to="/">Ievads</NavElement>
           <NavElement to="descriptions">Apraksts</NavElement>
-          <NavElement to="tables">Tabulas</NavElement>
-          <NavElement to="tables">Vaicājumi</NavElement>
+          <NavElement isLoaded={isSuccess} subroutes={tableNames} to="tables">
+            Tabulas
+          </NavElement>
+          <NavElement to="queries">Vaicājumi</NavElement>
           <NavElement to="procedures">Procedūras / Funkcijas</NavElement>
           <NavElement to="triggers">Trigeri</NavElement>
         </NavList>

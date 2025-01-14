@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
-      "types": ["node"],
-      "baseUrl": "src",
+      "types": ["node", "@tanstack/react-query"],
+      "baseUrl": "./src",
       "paths": {
-        "@/*": ["*"]
+        "@/*": ["./*"]
       },
       "jsx": "react-jsx",
       "esModuleInterop": true,

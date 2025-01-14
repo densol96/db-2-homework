@@ -68,6 +68,8 @@ select {
 
 button {
   cursor: pointer;
+  border: none;
+  background: transparent;
 }
 
 *:disabled {

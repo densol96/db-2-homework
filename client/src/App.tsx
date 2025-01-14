@@ -6,6 +6,7 @@ import GlobalStyles from "@/styles/GlobalStyles";
 import { Layout } from "@/ui/Layout";
 import { Home } from "@/pages/Home";
 import { ThemeProvider } from "@/context/ThemeContext";
+import useTables from "./features/tables/useTables";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +30,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
+              <Route path="tables/:name" />
             </Route>
           </Routes>
         </BrowserRouter>

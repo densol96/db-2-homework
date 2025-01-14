@@ -4,9 +4,10 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import GlobalStyles from "@/styles/GlobalStyles";
 import { Layout } from "@/ui/Layout";
-import { Home } from "@/pages/Home";
+import { Ievads } from "@/pages/Ievads";
 import { ThemeProvider } from "@/context/ThemeContext";
-import useTables from "./features/tables/useTables";
+import useTables from "./features/tables/useTableNames";
+import { Tabula } from "./pages/Tabula";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,8 +30,11 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-              <Route path="tables/:name" />
+              <Route index element={<Ievads />} />
+              <Route path="tables">
+                <Route index element={<Navigate to="users" />} />
+                <Route path=":name" element={<Tabula />} />
+              </Route>
             </Route>
           </Routes>
         </BrowserRouter>

@@ -10,9 +10,24 @@ import lv.solodeni.server.exception.InvalidTableNameException;
 @Service
 public class DataMapper {
 
+    public RowMapper<LinkedHashMap<String, Object>> dynamicMapper() {
+        return (rs, rowNum) -> {
+            int columnCount = rs.getMetaData().getColumnCount();
+            LinkedHashMap<String, Object> row = new LinkedHashMap<>();
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = rs.getMetaData().getColumnLabel(i);
+                Object columnValue = rs.getObject(i);
+                row.put(columnName, columnValue);
+            }
+            return row;
+        };
+    }
+
     public RowMapper<LinkedHashMap<String, Object>> getModel(String tableName) {
         switch (tableName) {
             case "users":
+                return mapDataToUser();
+            case "users_backup":
                 return mapDataToUser();
             case "articles":
                 return mapDataToArticle();
@@ -27,7 +42,7 @@ public class DataMapper {
             case "likes_per_comment":
                 return mapDataToLikePerComment();
             default:
-                throw new InvalidTableNameException("Unknown table name of " + tableName);
+                return dynamicMapper();
         }
     }
 

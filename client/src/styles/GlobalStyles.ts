@@ -17,6 +17,11 @@ export default createGlobalStyle`
     --border: 0.1px solid rgba(235, 235, 245, 0.2);
     --border-color: rgba(235, 235, 245, 0.2);
 
+    /* TABLE */
+    --color-table-light: #202127;
+    --color-table-dark: #1b1b1f;
+    --color-table-border: #2e2e32;
+
     &.light {
     /* BG */
     --color-bg-primary: rgb(246, 246, 247);
@@ -30,6 +35,11 @@ export default createGlobalStyle`
 
     --border-color: rgba(60, 60, 67, 0.2);
     --border: 0.1px solid rgba(60, 60, 67, 0.2);
+
+    /* TABLE */
+    --color-table-light: #f6f6f7;
+    --color-table-dark: #ffffff;
+    --color-table-border: #e2e2e3;
     };
 }
 
@@ -90,8 +100,7 @@ img {
 }
 
 .container {
-    max-width: 110rem;
+    max-width: 115rem;
     width: 100%;
 }
-
 `;

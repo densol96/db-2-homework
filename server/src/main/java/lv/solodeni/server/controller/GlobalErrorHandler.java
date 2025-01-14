@@ -27,7 +27,7 @@ public class GlobalErrorHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<Map> badSfkConstraintViolationqlInput(Exception e) {
+    public ResponseEntity<Map<String, String>> badFkConstraintViolationqlInput(Exception e) {
         String message = e.getMessage();
 
         System.out.println("===========================================");

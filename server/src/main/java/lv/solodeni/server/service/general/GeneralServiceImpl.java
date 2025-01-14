@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -76,15 +77,25 @@ public class GeneralServiceImpl implements IGeneralService {
     }
 
     @Override
-    public List<Map<String, Object>> getAll(String tableName, Integer page, Integer rowsPerPage) {
-
+    public LinkedHashMap<String, Object> getAll(String tableName, Integer page, Integer rowsPerPage) {
+        System.out.println("I RUN");
         final int DEFAULT_ROWS_PER_PAGE = 5;
 
         List<String> tableNames = repo.getAllTableNames();
-        if (!tableNames.contains(tableName))
-            throw new InvalidTableNameException("There is table with the name of " + tableName);
 
+        if (!tableNames.contains(tableName))
+            throw new InvalidTableNameException("There is no table with the name of " + tableName);
         int totalResults = repo.countRows(tableName);
+
+        LinkedHashMap<String, Object> json = new LinkedHashMap<>();
+
+        if (totalResults == 0) {
+            json.put("pagesTotal", 0);
+            json.put("resultsTotal", 0);
+            json.put("result", new ArrayList<>());
+            return json;
+        }
+
         rowsPerPage = (rowsPerPage != null ? rowsPerPage : DEFAULT_ROWS_PER_PAGE);
         int pagesTotal = (int) Math.ceil(totalResults / (double) rowsPerPage);
 
@@ -92,10 +103,13 @@ public class GeneralServiceImpl implements IGeneralService {
             throw new InvalidInputException(
                     "Ivalid page namber of " + page + " (total pages: %%)".replace("%%", "" + pagesTotal));
 
-        return (page == null
+        json.put("pagesTotal", pagesTotal);
+        json.put("resultsTotal", totalResults);
+        json.put("result", (page == null
                 ? repo.getAll(tableName)
                 : repo.getByPage(tableName, (page - 1) * rowsPerPage, rowsPerPage))
-                .stream().map((jsonData) -> (Map<String, Object>) jsonData).toList();
+                .stream().map((jsonData) -> (Map<String, Object>) jsonData).toList());
+        return json;
     }
 
     @Override
@@ -128,7 +142,7 @@ public class GeneralServiceImpl implements IGeneralService {
         try {
             String script = Files
                     .readString(Paths.get(ClassLoader.getSystemResource("db/queries/" + fileName).toURI()));
-            List<Object> result = repo.runQuery(script);
+            List<LinkedHashMap<String, Object>> result = repo.runQuery(script);
             Map<String, Object> json = new LinkedHashMap<>();
             json.put("script", script);
             json.put("result", result);

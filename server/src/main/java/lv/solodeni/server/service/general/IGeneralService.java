@@ -1,6 +1,5 @@
 package lv.solodeni.server.service.general;
 
-import java.util.List;
 import java.util.Map;
 
 public interface IGeneralService {
@@ -10,7 +9,7 @@ public interface IGeneralService {
 
     Map<String, Object> showInsertTableScript(String tableName) throws Exception;
 
-    List<Map<String, Object>> getAll(String tableName, Integer page, Integer rowsPerPage);
+    Map<String, Object> getAll(String tableName, Integer page, Integer rowsPerPage);
 
     Map<String, Object> deleteById(String tableName, Integer id);
 

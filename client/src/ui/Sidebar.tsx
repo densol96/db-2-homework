@@ -5,7 +5,7 @@ import { NavElement } from "./NavElement";
 import { Api } from "@/services/aoi-client";
 import { ApiRoutes } from "@/services/constants";
 import { useQuery } from "@tanstack/react-query";
-import useTables from "@/features/tables/useTables";
+import useTableNames from "@/features/tables/useTableNames";
 
 const StyledSidebar = styled.aside`
   background-color: var(--color-bg-primary);
@@ -29,7 +29,7 @@ const NavList = styled.ul`
 `;
 
 export const Sidebar = () => {
-  const { tableNames, isSuccess } = useTables();
+  const { tableNames, isSuccess } = useTableNames();
 
   return (
     <StyledSidebar>

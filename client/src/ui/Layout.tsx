@@ -15,11 +15,11 @@ const MainArea = styled.div`
 `;
 
 const Main = styled.div`
-  border: 1px solid red;
+  /* border: 1px solid red; */
   padding: 4.8rem 0 4.8rem 12.8rem;
-  display: grid;
+  /* display: grid;
   grid-template-columns: 1fr 22rem;
-  column-gap: 6.4rem;
+  column-gap: 6.4rem; */
 `;
 
 const Article = styled.div``;
@@ -35,10 +35,11 @@ export const Layout = () => {
       <MainArea>
         <Header />
         <Main className="container">
-          <Article>
+          <Outlet />
+          {/* <Article>
             <Outlet />
           </Article>
-          <PageIndex />
+          <PageIndex /> */}
         </Main>
       </MainArea>
     </StyledLayout>

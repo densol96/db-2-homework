@@ -19,7 +19,7 @@ export const Tabula = () => {
   const {
     table,
     pagesTotal,
-    totalResults,
+    resultsTotal,
     isLoading,
     isSuccess,
     isError,
@@ -30,15 +30,15 @@ export const Tabula = () => {
     if (page < 1 || isError) {
       searchParams.set("page", 1 + "");
       setSearchParams(searchParams);
-    } else if (page > pagesTotal && totalResults > 0) {
+    } else if (page > pagesTotal && resultsTotal > 0) {
       searchParams.set("page", pagesTotal + "");
       setSearchParams(searchParams);
     }
-  }, [page, pagesTotal, totalResults, isError]);
+  }, [page, pagesTotal, resultsTotal, isError]);
 
   usePrefetching(isSuccess, page, pagesTotal, name);
 
-  const displaySpinner = page < 1 || isError || isLoading;
+  const displaySpinner = isError || isLoading;
 
   return (
     <>
@@ -47,7 +47,7 @@ export const Tabula = () => {
         <Spinner />
       ) : (
         <Table
-          forDisplay={isSuccess}
+          tableName={name}
           data={table}
           pagination={<Pagination pagesTotal={pagesTotal} />}
         />

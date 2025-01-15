@@ -99,9 +99,15 @@ public class GeneralServiceImpl implements IGeneralService {
         rowsPerPage = (rowsPerPage != null ? rowsPerPage : DEFAULT_ROWS_PER_PAGE);
         int pagesTotal = (int) Math.ceil(totalResults / (double) rowsPerPage);
 
-        if (page != null && (page < 1 || page > pagesTotal))
+        if (page != null && page < 1)
             throw new InvalidInputException(
                     "Ivalid page namber of " + page + " (total pages: %%)".replace("%%", "" + pagesTotal));
+        if (page > pagesTotal) {
+            json.put("pagesTotal", pagesTotal);
+            json.put("resultsTotal", totalResults);
+            json.put("result", new ArrayList<>());
+            return json;
+        }
 
         json.put("pagesTotal", pagesTotal);
         json.put("resultsTotal", totalResults);

@@ -7,3 +7,8 @@ export const capitalizeWords = (
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 };
+
+export const pausePromise = async (ms: number) =>
+  await new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });

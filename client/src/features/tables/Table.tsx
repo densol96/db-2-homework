@@ -3,11 +3,13 @@ import styled from "styled-components";
 import useTable from "./useTable";
 import Pagination from "@/ui/Pagination";
 import { TbMoodEmptyFilled } from "react-icons/tb";
+import { FaTrash } from "react-icons/fa";
+import useDeleteRow from "./useDeleteRow";
 
 type Props = {
   pagination: React.ReactNode;
   data: Record<string, any>[];
-  forDisplay: boolean;
+  tableName: string;
 };
 //
 
@@ -41,6 +43,10 @@ const StyledTable = styled.table<{ hasFooter: boolean }>`
       }
     }
   }
+
+  .delete-btn {
+    color: var(--color-active);
+  }
 `;
 
 const StyledEmptyMessage = styled.div`
@@ -55,7 +61,9 @@ const StyledEmptyMessage = styled.div`
   }
 `;
 
-export const Table: React.FC<Props> = ({ data, forDisplay, pagination }) => {
+export const Table: React.FC<Props> = ({ data, tableName, pagination }) => {
+  const { isDeleting, deleteRow } = useDeleteRow(tableName);
+
   if (data.length === 0) {
     return (
       <StyledEmptyMessage>
@@ -75,20 +83,32 @@ export const Table: React.FC<Props> = ({ data, forDisplay, pagination }) => {
           {columns.map((col) => (
             <th>{col}</th>
           ))}
+          <th>Dzēst</th>
         </tr>
       </thead>
       <tbody>
-        {data.map((row) => (
-          <tr>
-            {columns.map((colName) => (
-              <td>{row[colName]}</td>
-            ))}
-          </tr>
-        ))}
+        {data.map((row) => {
+          return (
+            <tr>
+              {columns.map((colName) => (
+                <td>{row[colName]}</td>
+              ))}
+              <th>
+                <button
+                  disabled={isDeleting}
+                  onClick={() => deleteRow([tableName, row.id])}
+                  className="delete-btn"
+                >
+                  <FaTrash />
+                </button>
+              </th>
+            </tr>
+          );
+        })}
       </tbody>
       <tfoot>
         <tr>
-          <td className="footer-pagination" colSpan={columns.length}>
+          <td className="footer-pagination" colSpan={columns.length + 1}>
             {pagination}
           </td>
         </tr>

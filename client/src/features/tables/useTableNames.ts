@@ -15,7 +15,7 @@ function useTableNames(): {
     isSuccess,
   } = useQuery<ApiTypes.ALL_TABLES>({
     queryKey: [ApiRoutes.ALL_TABLES],
-    queryFn: Api.tables.getAll,
+    queryFn: Api.tables.getAllTablenames,
     staleTime: Infinity,
   });
   const { tableNames, tablesTotal } = data;

@@ -5,8 +5,6 @@ import java.util.LinkedHashMap;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
-import lv.solodeni.server.exception.InvalidTableNameException;
-
 @Service
 public class DataMapper {
 
@@ -89,6 +87,7 @@ public class DataMapper {
     private RowMapper<LinkedHashMap<String, Object>> mapDataToArticleTag() {
         return (rs, rowNum) -> {
             LinkedHashMap<String, Object> jsonData = new LinkedHashMap<>();
+            jsonData.put("id", rs.getInt("id"));
             jsonData.put("articleId", rs.getInt("article_id"));
             jsonData.put("tagId", rs.getInt("tag_id"));
             return jsonData;
@@ -99,6 +98,7 @@ public class DataMapper {
     private RowMapper<LinkedHashMap<String, Object>> mapDataToUserArticleRating() {
         return (rs, rowNum) -> {
             LinkedHashMap<String, Object> jsonData = new LinkedHashMap<>();
+            jsonData.put("id", rs.getInt("id"));
             jsonData.put("articleId", rs.getInt("article_id"));
             jsonData.put("userId", rs.getInt("user_id"));
             jsonData.put("rating", rs.getInt("rating"));
@@ -124,6 +124,7 @@ public class DataMapper {
     private RowMapper<LinkedHashMap<String, Object>> mapDataToLikePerComment() {
         return (rs, rowNum) -> {
             LinkedHashMap<String, Object> jsonData = new LinkedHashMap<>();
+            jsonData.put("id", rs.getInt("id"));
             jsonData.put("commentId", rs.getInt("comment_id"));
             jsonData.put("userId", rs.getInt("user_id"));
             return jsonData;

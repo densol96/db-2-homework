@@ -8,6 +8,7 @@ import { Ievads } from "@/pages/Ievads";
 import { ThemeProvider } from "@/context/ThemeContext";
 import useTables from "./features/tables/useTableNames";
 import { Tabula } from "./pages/Tabula";
+import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,6 +39,7 @@ function App() {
             </Route>
           </Routes>
         </BrowserRouter>
+        <Toaster position="top-center" reverseOrder={false} />
       </QueryClientProvider>
     </ThemeProvider>
   );

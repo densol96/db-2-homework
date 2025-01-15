@@ -7,5 +7,10 @@ export type ALL_TABLES = {
 export type SINGLE_TABLE = {
   result: object[];
   pagesTotal: number;
-  totalResults: number;
+  resultsTotal: number;
+};
+
+export type DELETED_TABLE = {
+  status: "success" | "error";
+  rowsAffected: number;
 };

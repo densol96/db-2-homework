@@ -9,6 +9,7 @@ const StyledPagination = styled.div`
   justify-content: space-between;
   font-size: 1.2rem;
   padding: 1rem;
+  gap: 3rem;
 `;
 
 const P = styled.p``;
@@ -21,7 +22,7 @@ const Buttons = styled.div`
 const PaginationButton = styled.button`
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 5px;
   font-size: inherit;
 
   &:disabled {

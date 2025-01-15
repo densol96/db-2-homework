@@ -40,7 +40,7 @@ public class GlobalErrorHandler {
         Map<String, String> response = new LinkedHashMap<>();
         response.put("isDataViolation", "true");
         response.put("message",
-                "Your provided input has invalid format / value. Please, check the DB schema and try again!");
+                "Unable to delete due to a foreign key constraint");
         response.put("reason", reason);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

@@ -4,15 +4,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.sql.Types;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.jdbc.core.PreparedStatementCallback;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,8 +27,7 @@ public class GeneralRepo {
     private String dataSourceUrl;
 
     public List<String> getAllTableNames() {
-        String dbName = dataSourceUrl.replace("jdbc:mysql://localhost:3307/", "")
-                .replace("?createDatabaseIfNotExist=true", "");
+        String dbName = getDbName();
 
         String sql = """
                 SELECT table_name
@@ -56,7 +50,7 @@ public class GeneralRepo {
 
     public List<LinkedHashMap<String, Object>> getByPage(String tableName, Integer offset, Integer limit) {
         String sql = "SELECT * FROM " + tableName + " LIMIT " + limit + " OFFSET " + offset;
-        return template.query(sql, dataMapper.getModel(tableName));
+        return template.query(sql, dataMapper.dynamicMapper());
     }
 
     public Integer countRows(String tableName) {
@@ -110,6 +104,18 @@ public class GeneralRepo {
         }
     }
 
+    private String getDbName() {
+        return dataSourceUrl.replace("jdbc:mysql://localhost:3307/", "")
+                .replace("?createDatabaseIfNotExist=true", "");
+    }
+
+    public List<String> getColumnNames(String tableName) {
+        String sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '%db_name%' AND TABLE_NAME = '%table_name%';"
+                .replace("%db_name%", getDbName()).replace("%table_name%", tableName);
+
+        return template.query(sql, (rs, rowNum) -> rs.getString("COLUMN_NAME"));
+    }
+
     private String selectInsertQuery(String tableName) {
         switch (tableName) {
             case "users":
@@ -130,5 +136,4 @@ public class GeneralRepo {
                 throw new InvalidTableNameException("Unknown table name of " + tableName);
         }
     }
-
 }

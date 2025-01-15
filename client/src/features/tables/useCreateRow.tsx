@@ -1,21 +1,21 @@
-import { deleteOne } from "@/services/tables";
+import { post } from "@/services/tables";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as ApiTypes from "@/services/types";
 import toast from "react-hot-toast";
 import { AxiosError } from "axios";
 
-const useDeleteRow = (tableName: string) => {
+const useCreateRow = (tableName: string) => {
   const queryClient = useQueryClient();
-  const { isPending: isDeleting, mutate: deleteRow } = useMutation<
-    ApiTypes.DELETED_TABLE,
+  const { isPending: isPosting, mutate: postRow } = useMutation<
+    void,
     Error,
-    number
+    { [key: string]: any }
   >({
-    mutationFn: (id: number) => {
-      const promise: Promise<ApiTypes.DELETED_TABLE> = deleteOne(tableName, id);
+    mutationFn: async (formData) => {
+      const promise: Promise<ApiTypes.CREATE_ROW> = post(formData, tableName);
       toast.promise(promise, {
-        loading: "Deleting...",
-        success: <b>Row deleted!</b>,
+        loading: "Posting...",
+        success: <b>New row posted</b>,
         error: (error) => {
           const errMsg =
             error instanceof AxiosError
@@ -23,19 +23,19 @@ const useDeleteRow = (tableName: string) => {
               : error.message;
           return (
             <b style={{ textAlign: `center` }}>
-              {error.response.data.message || "Unable to remove the row!"}{" "}
+              {errMsg || "Unable to remove the row!"}{" "}
             </b>
           );
         },
       });
-      return promise;
     },
-    onSuccess: (data: ApiTypes.DELETED_TABLE) => {
+    onSuccess: () => {
+      alert("SHOULD INVALIDATE");
       queryClient.invalidateQueries({ queryKey: [tableName] });
     },
   });
 
-  return { isDeleting, deleteRow };
+  return { isPosting, postRow };
 };
 
-export default useDeleteRow;
+export default useCreateRow;

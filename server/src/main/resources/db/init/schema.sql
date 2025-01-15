@@ -103,3 +103,4 @@ CREATE TABLE `trigger_logs` (
     `datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(`id`)
 );
+

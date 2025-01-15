@@ -16,6 +16,7 @@ type Props = {
 const StyledTable = styled.table<{ hasFooter: boolean }>`
   font-size: 1.4rem;
   border-collapse: collapse;
+  width: 100%;
 
   td,
   th {
@@ -91,12 +92,12 @@ export const Table: React.FC<Props> = ({ data, tableName, pagination }) => {
           return (
             <tr>
               {columns.map((colName) => (
-                <td>{row[colName]}</td>
+                <td>{`${row[colName]}`}</td>
               ))}
               <th>
                 <button
                   disabled={isDeleting}
-                  onClick={() => deleteRow([tableName, row.id])}
+                  onClick={() => deleteRow(row.id)}
                   className="delete-btn"
                 >
                   <FaTrash />

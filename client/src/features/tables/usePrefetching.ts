@@ -15,7 +15,7 @@ function usePrefetching(
     if (isSuccess) {
       if (page < pagesTotal) {
         queryClient.prefetchQuery({
-          queryKey: [ApiRoutes.SINGLE_TABLE, tableName, page + 1],
+          queryKey: [tableName, page + 1],
           queryFn: () => Api.tables.getOne(tableName, page),
           retry: 3,
           staleTime: Infinity,
@@ -23,7 +23,7 @@ function usePrefetching(
       }
       if (page > 1) {
         queryClient.prefetchQuery({
-          queryKey: [ApiRoutes.SINGLE_TABLE, tableName, page - 1],
+          queryKey: [tableName, page - 1],
           queryFn: () => Api.tables.getOne(tableName, page),
           retry: 3,
           staleTime: Infinity,

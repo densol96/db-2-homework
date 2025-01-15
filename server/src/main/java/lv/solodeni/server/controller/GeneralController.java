@@ -1,5 +1,6 @@
 package lv.solodeni.server.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-
+import lv.solodeni.server.repository.GeneralRepo;
 import lv.solodeni.server.service.general.IGeneralService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,15 +33,21 @@ public class GeneralController {
         return new ResponseEntity<>(service.getAllTableNames(), HttpStatus.OK);
     }
 
+    @GetMapping("/tables-columns")
+    public ResponseEntity<List<String>> getColumnNames(
+            @RequestParam(value = "tableName", required = true) String tableName) {
+        return new ResponseEntity<>(service.getColumnNames(tableName), HttpStatus.OK);
+    }
+
     @GetMapping("/tables-create-script")
     public ResponseEntity<Map<String, Object>> getCreateScript(
-            @RequestParam(value = "name", required = true) String tableName) {
+            @RequestParam(value = "tableName", required = true) String tableName) {
         return new ResponseEntity<>(service.showCreateTableScript(tableName), HttpStatus.OK);
     }
 
     @GetMapping("/tables-insert-script")
     public ResponseEntity<Map<String, Object>> getInsertScript(
-            @RequestParam(value = "name", required = true) String tableName) throws Exception {
+            @RequestParam(value = "tableName", required = true) String tableName) throws Exception {
         return new ResponseEntity<>(service.showInsertTableScript(tableName), HttpStatus.OK);
     }
 

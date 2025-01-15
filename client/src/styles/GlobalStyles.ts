@@ -12,7 +12,7 @@ export default createGlobalStyle`
     --color-text: rgba(255, 255, 245, 0.86);
     --color-text-grey: rgba(235, 235, 245, 0.6);
     --color-active: rgb(246, 115, 115);
-
+    --color-text-opposite: rgb(60, 60, 67);
 
     --border: 0.1px solid rgba(235, 235, 245, 0.2);
     --border-color: rgba(235, 235, 245, 0.2);
@@ -26,12 +26,13 @@ export default createGlobalStyle`
     /* BG */
     --color-bg-primary: rgb(246, 246, 247);
     --color-bg-secondary: rgb(246, 246, 247);;
-    --color-bg-light: rgb(246, 246, 247);;
+    --color-bg-light: rgb(246, 246, 247);
 
     /* FONTS */
     --color-text: rgb(60, 60, 67);
     --color-text-grey: rgba(72, 63, 70, 0.792);
     --color-active: rgb(246, 115, 115);
+    --color-text-opposite: rgb(60, 60, 67);
 
     --border-color: rgba(60, 60, 67, 0.2);
     --border: 0.1px solid rgba(60, 60, 67, 0.2);

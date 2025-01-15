@@ -7,7 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -40,7 +40,7 @@ public class GlobalErrorHandler {
         Map<String, String> response = new LinkedHashMap<>();
         response.put("isDataViolation", "true");
         response.put("message",
-                "Unable to delete due to a foreign key constraint");
+                "Failure due to a foreign key constraint");
         response.put("reason", reason);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -58,6 +58,12 @@ public class GlobalErrorHandler {
     @ExceptionHandler({ MethodArgumentTypeMismatchException.class, NoResourceFoundException.class })
     public ResponseEntity<ErrorDto> invalidUrlPath(Exception e) {
         return new ResponseEntity<>(new ErrorDto("Invalid URL path. Re-check and try again!"),
+                HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    @ExceptionHandler(UncategorizedSQLException.class)
+    public ResponseEntity<ErrorDto> invalidDataFormat(UncategorizedSQLException e) {
+        return new ResponseEntity<>(new ErrorDto("Invalid data format"),
                 HttpStatus.SERVICE_UNAVAILABLE);
     }
 

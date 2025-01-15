@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,12 +34,22 @@ public class GeneralServiceImpl implements IGeneralService {
     }
 
     @Override
+    public List<String> getColumnNames(String tableName) {
+        List<String> tableNames = repo.getAllTableNames();
+
+        if (!tableNames.contains(tableName))
+            throw new InvalidTableNameException("There is no table with the name of " + tableName);
+
+        return repo.getColumnNames(tableName);
+    }
+
+    @Override
     public LinkedHashMap<String, Object> showCreateTableScript(String tableName) {
 
         List<String> tableNames = repo.getAllTableNames();
 
         if (!tableNames.contains(tableName))
-            throw new InvalidTableNameException("There is table with the name of " + tableName);
+            throw new InvalidTableNameException("There is no table with the name of " + tableName);
 
         String result = repo.getCreateTableScript(tableName);
         LinkedHashMap<String, Object> json = new LinkedHashMap<>();
@@ -52,7 +62,7 @@ public class GeneralServiceImpl implements IGeneralService {
         List<String> tableNames = repo.getAllTableNames();
 
         if (!tableNames.contains(tableName))
-            throw new InvalidTableNameException("There is table with the name of " + tableName);
+            throw new InvalidTableNameException("There is no table with the name of " + tableName);
 
         List<String> lines = Files.readAllLines(Paths.get(ClassLoader.getSystemResource("db/init/data.sql").toURI()))
                 .stream().map(line -> line + "{{ END OF LINE }}").toList();
@@ -123,7 +133,7 @@ public class GeneralServiceImpl implements IGeneralService {
         if (id == null || id < 0)
             throw new InvalidInputException("Invalid id of " + id);
         if (!repo.getAllTableNames().contains(tableName))
-            throw new InvalidTableNameException("There is table with the name of " + tableName);
+            throw new InvalidTableNameException("There is no table with the name of " + tableName);
         int rowsAffected = repo.deleteById(tableName, id);
         var json = new LinkedHashMap<String, Object>();
         json.put("status", rowsAffected == 1 ? "success" : "error");

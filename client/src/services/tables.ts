@@ -39,12 +39,17 @@ export const getColumns = async (tableName: string) =>
     )
   ).data;
 
+const updateNullable = (formData: { [key: string]: string }) => {
+  Object.keys(formData).forEach(
+    (key) => (formData[key] = formData[key] || null)
+  );
+};
+
 export const post = async (
   formData: { [key: string]: string },
   tableName: string
 ) => {
-  formData["parent_comment_id"] = formData["parent_comment_id"] || null;
-  console.log(formData);
+  updateNullable(formData);
   const response = await axiosInstance.post<ApiTypes.CREATE_ROW>(
     ApiRoutes.POST_ROW.replace("${tableName}", tableName),
     formData
@@ -54,3 +59,13 @@ export const post = async (
     throw new Error(`Unable to post`);
   return data;
 };
+
+export const getScript = async (tableName: string, type: "insert" | "create") =>
+  (
+    await axiosInstance.get<ApiTypes.SCRIPT>(
+      ApiRoutes.SCRIPT.replace("${create_insert}", type).replace(
+        "${tableName}",
+        tableName
+      )
+    )
+  ).data;

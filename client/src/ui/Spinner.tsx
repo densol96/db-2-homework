@@ -9,7 +9,7 @@ const StyledSpinner = styled.div`
   .loader {
     width: 48px;
     height: 48px;
-    border: 5px solid #fff;
+    border: 5px solid var(--color-text);
     border-bottom-color: transparent;
     border-radius: 50%;
     display: inline-block;

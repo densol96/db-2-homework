@@ -28,9 +28,9 @@ const useCreateRow = (tableName: string) => {
           );
         },
       });
+      await promise;
     },
     onSuccess: () => {
-      alert("SHOULD INVALIDATE");
       queryClient.invalidateQueries({ queryKey: [tableName] });
     },
   });

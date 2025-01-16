@@ -1,4 +1,11 @@
-import React, { cloneElement, ReactElement, useRef, useState } from "react";
+import React, {
+  cloneElement,
+  createContext,
+  ReactElement,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 import ReactDOM, { createPortal } from "react-dom";
 import { IoMdCloseCircle } from "react-icons/io";
 import styled from "styled-components";
@@ -23,6 +30,8 @@ const Window = styled.div`
   background-color: var(--color-table-light);
   border-radius: 3px;
   border: 2px solid var(--color-table-border);
+  max-height: 90vh;
+  overflow-y: auto;
 `;
 
 const CloseBtn = styled.button`
@@ -36,6 +45,21 @@ type Props = {
   triggerElement?: React.ReactElement<{ onClick: () => void }>;
 };
 
+type ModalValueType = {
+  isOpen: boolean;
+  open: () => void;
+  close: () => void;
+};
+
+const ModalContext = createContext<ModalValueType>(undefined);
+
+export const useModalContext = () => {
+  const context = useContext(ModalContext);
+  if (context === undefined)
+    throw new Error("useModalContext used outside the Provider");
+  return context;
+};
+
 export const Modal: React.FC<Props> = ({ triggerElement, children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const overlay = useRef<HTMLDivElement>(null);
@@ -45,7 +69,13 @@ export const Modal: React.FC<Props> = ({ triggerElement, children }) => {
   }
 
   return (
-    <>
+    <ModalContext.Provider
+      value={{
+        isOpen,
+        open: () => setIsOpen(true),
+        close: () => setIsOpen(false),
+      }}
+    >
       {cloneElement(triggerElement as React.ReactElement<any>, {
         onClick: () => setIsOpen(true),
       })}
@@ -61,6 +91,6 @@ export const Modal: React.FC<Props> = ({ triggerElement, children }) => {
           </Overlay>,
           document.body
         )}
-    </>
+    </ModalContext.Provider>
   );
 };

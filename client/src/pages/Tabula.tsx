@@ -15,6 +15,20 @@ import { useSearchParams } from "react-router-dom";
 import { IoMdAddCircle } from "react-icons/io";
 import { Modal } from "@/ui/Modal";
 import { CreateNewForm } from "@/features/tables/CreateNewForm";
+import styled from "styled-components";
+import { BsDatabaseFillAdd, BsDatabaseFillUp } from "react-icons/bs";
+import { ScriptDisplay } from "@/ui/ScriptDisplay";
+const HeaderRow = styled.section`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  div {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+`;
 
 export const Tabula = () => {
   const { name } = useParams();
@@ -39,21 +53,45 @@ export const Tabula = () => {
 
   return (
     <>
-      <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
-        <Heading as="h1">{capitalizeWords(name, "_")}</Heading>
-        {name !== "trigger_logs" && name !== "users_backup" && (
+      <HeaderRow>
+        <div>
+          <Heading as="h1">{capitalizeWords(name, "_")}</Heading>
+          {name !== "trigger_logs" && name !== "users_backup" && (
+            <Modal
+              triggerElement={
+                <Button>
+                  <IoMdAddCircle />
+                  Pievienot
+                </Button>
+              }
+            >
+              <CreateNewForm tableName={name} />
+            </Modal>
+          )}
+        </div>
+        <div>
           <Modal
             triggerElement={
-              <Button>
-                <IoMdAddCircle />
-                Pievienot
+              <Button isBright={false}>
+                <BsDatabaseFillAdd />
+                Tabulas izveides skripts
               </Button>
             }
           >
-            <CreateNewForm tableName={name} />
+            <ScriptDisplay type="create" tableName={name} />
           </Modal>
-        )}
-      </div>
+          <Modal
+            triggerElement={
+              <Button isBright={false}>
+                <BsDatabaseFillUp />
+                Datu ievietošanas skripts
+              </Button>
+            }
+          >
+            <ScriptDisplay type="insert" tableName={name} />
+          </Modal>
+        </div>
+      </HeaderRow>
       {displaySpinner ? (
         <Spinner />
       ) : (

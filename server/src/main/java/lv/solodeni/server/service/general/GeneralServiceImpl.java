@@ -74,7 +74,7 @@ public class GeneralServiceImpl implements IGeneralService {
                 addFromNowOn = true;
 
             if (addFromNowOn)
-                insertQuery += line.replace("{{ END OF LINE }}", "");
+                insertQuery += line.replace("{{ END OF LINE }}", "\n");
 
             if (addFromNowOn && line.contains(";{{ END OF LINE }}"))
                 break;

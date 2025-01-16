@@ -5,15 +5,17 @@ import React, { Children, cloneElement, ReactElement } from "react";
 import Heading from "./Heading";
 import { Button } from "./Button";
 import * as ApiTypes from "@/services/types";
+import { useModalContext } from "./Modal";
 
 const StyledForm = styled.form`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 2fr;
   gap: 2rem;
   font-weight: 500;
   /* background-color: inherit; */
   input,
-  select {
+  select,
+  textarea {
     color: var(--color-text-opposite);
   }
   font-family: inherit;
@@ -70,7 +72,8 @@ export const Form: React.FC<Props> = ({ children, textFields, onSubmit }) => {
           // (input or select)
           if (
             (childWithRegister.type === "input" ||
-              childWithRegister.type === "select") &&
+              childWithRegister.type === "select" ||
+              childWithRegister.type === "textarea") &&
             childWithRegister.props.name
           ) {
             return React.cloneElement(childWithRegister, {

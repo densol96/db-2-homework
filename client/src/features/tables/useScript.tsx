@@ -4,25 +4,23 @@ import { useQuery } from "@tanstack/react-query";
 import * as ApiTypes from "@/services/types";
 import { extractErrorMessage } from "@/helpers/helpers";
 
-function useTable(tableName: string, page: number) {
+function useScript(tableName: string, type: "insert" | "create") {
   const {
-    data = { result: [], pagesTotal: 0, resultsTotal: 0 },
+    data = { script: undefined },
     isLoading,
     isSuccess,
     isError,
     error,
-  } = useQuery<ApiTypes.SINGLE_TABLE>({
-    queryKey: [tableName, page],
-    queryFn: () => Api.tables.getOne(tableName, page),
+  } = useQuery<ApiTypes.SCRIPT>({
+    queryKey: [tableName, type],
+    queryFn: () => Api.tables.getScript(tableName, type),
     retry: 1,
   });
-  const { result: table, pagesTotal, resultsTotal } = data;
+  const { script } = data;
   let errorMsg: string | undefined = undefined;
   if (error) errorMsg = extractErrorMessage(error);
   return {
-    table,
-    pagesTotal,
-    resultsTotal,
+    script,
     isLoading,
     isSuccess,
     isError,
@@ -30,4 +28,4 @@ function useTable(tableName: string, page: number) {
   };
 }
 
-export default useTable;
+export default useScript;

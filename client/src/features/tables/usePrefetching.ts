@@ -30,7 +30,7 @@ function usePrefetching(
         });
       }
     }
-  }, [page, isSuccess]);
+  }, [page, isSuccess, tableName]);
 }
 
 export default usePrefetching;

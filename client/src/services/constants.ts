@@ -4,4 +4,5 @@ export const ApiRoutes = {
   DELETE_TABLE: "/tables/${tableName}/${id}",
   COLUMNS: "/tables-columns?tableName=${tableName}",
   POST_ROW: "/tables/${tableName}",
+  SCRIPT: "/tables-${create_insert}-script?tableName=${tableName}",
 } as const;

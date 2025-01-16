@@ -37,11 +37,13 @@ public class GlobalErrorHandler {
         String[] arr = message.split(";");
         String reason = arr[arr.length - 1].trim();
 
+        if (reason.contains("a foreign key constraint fails"))
+            reason = "The foreign key provided is invalid or does not exist in the referenced table.";
         Map<String, String> response = new LinkedHashMap<>();
         response.put("isDataViolation", "true");
         response.put("message",
-                "Failure due to a foreign key constraint");
-        response.put("reason", reason);
+                reason);
+        // response.put("reason", reason);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

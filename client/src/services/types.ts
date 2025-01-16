@@ -18,3 +18,7 @@ export type DELETED_TABLE = {
 export type CREATE_ROW = DELETED_TABLE;
 
 export type COLUMNS = string[];
+
+export type SCRIPT = {
+  script: string;
+};

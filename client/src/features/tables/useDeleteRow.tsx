@@ -30,7 +30,7 @@ const useDeleteRow = (tableName: string) => {
       });
       return promise;
     },
-    onSuccess: (data: ApiTypes.DELETED_TABLE) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [tableName] });
     },
   });

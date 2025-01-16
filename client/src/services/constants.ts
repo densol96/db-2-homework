@@ -5,4 +5,5 @@ export const ApiRoutes = {
   COLUMNS: "/tables-columns?tableName=${tableName}",
   POST_ROW: "/tables/${tableName}",
   SCRIPT: "/tables-${create_insert}-script?tableName=${tableName}",
+  QUERY: "/queries/${queryNum}",
 } as const;

@@ -18,17 +18,7 @@ import { CreateNewForm } from "@/features/tables/CreateNewForm";
 import styled from "styled-components";
 import { BsDatabaseFillAdd, BsDatabaseFillUp } from "react-icons/bs";
 import { ScriptDisplay } from "@/ui/ScriptDisplay";
-const HeaderRow = styled.section`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  div {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-  }
-`;
+import HeaderRow from "@/ui/HeaderRow";
 
 export const Tabula = () => {
   const { name } = useParams();

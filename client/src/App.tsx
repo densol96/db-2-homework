@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import useTables from "./features/tables/useTableNames";
 import { Tabula } from "./pages/Tabula";
 import { Toaster } from "react-hot-toast";
+import { Vaicajumi } from "./pages/Vaicajumi";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,6 +37,7 @@ function App() {
                 <Route index element={<Navigate to="users" />} />
                 <Route path=":name" element={<Tabula />} />
               </Route>
+              <Route path="queries" element={<Vaicajumi />} />
             </Route>
           </Routes>
         </BrowserRouter>

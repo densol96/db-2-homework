@@ -88,7 +88,6 @@ public class GeneralServiceImpl implements IGeneralService {
 
     @Override
     public LinkedHashMap<String, Object> getAll(String tableName, Integer page, Integer rowsPerPage) {
-        System.out.println("I RUN");
         final int DEFAULT_ROWS_PER_PAGE = 5;
 
         List<String> tableNames = repo.getAllTableNames();

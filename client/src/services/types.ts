@@ -22,3 +22,8 @@ export type COLUMNS = string[];
 export type SCRIPT = {
   script: string;
 };
+
+export type QUERY = {
+  script: string;
+  result: any;
+};

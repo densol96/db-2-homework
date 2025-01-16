@@ -2,13 +2,19 @@ import React from "react";
 import useScript from "../features/tables/useScript";
 import styled from "styled-components";
 import { Spinner } from "@/ui/Spinner";
+import Heading from "./Heading";
 
 type Props = {
   tableName: string;
   type: "insert" | "create";
 };
 
-const CodeArea = styled.code``;
+const CodeArea = styled.div`
+  display: block;
+  line-height: 1.7;
+`;
+
+const Container = styled.div``;
 
 export const ScriptDisplay: React.FC<Props> = ({ tableName, type }) => {
   const { isLoading, script, isError, errorMsg } = useScript(tableName, type);
@@ -26,5 +32,10 @@ export const ScriptDisplay: React.FC<Props> = ({ tableName, type }) => {
     return <p>{line}</p>;
   });
 
-  return <CodeArea>{lines_edited}</CodeArea>;
+  return (
+    <div>
+      <Heading as="h1">Testik</Heading>
+      <CodeArea>{lines_edited}</CodeArea>
+    </div>
+  );
 };

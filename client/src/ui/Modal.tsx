@@ -32,6 +32,7 @@ const Window = styled.div`
   border: 2px solid var(--color-table-border);
   max-height: 90vh;
   overflow-y: auto;
+  max-width: 90vw;
 `;
 
 const CloseBtn = styled.button`

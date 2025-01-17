@@ -1,26 +1,26 @@
-import React, { ReactNode, useState } from "react";
 import Heading from "@/ui/Heading";
 import Select from "@/ui/Select";
 import Row from "@/ui/Row";
 import HeaderRow from "@/ui/HeaderRow";
-import { useSearchParams } from "react-router-dom";
 import useSearchQuery from "@/hooks/useSearchQuery";
-import { Queries } from "./Queries";
 
 type Props = {
   options: number;
-  title: string;
-  keyQuery: "queryNum" | "procedureNum" | "triggerNum";
-  children?: ReactNode;
+  children: string;
+  selectTitle?: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  value: string | number;
 };
 
-export const DisplayResult: React.FC<Props> = ({
+export const DisplayHeadingWithSelect: React.FC<Props> = ({
   options,
-  title,
-  keyQuery,
-  children,
+  children: title,
+  selectTitle,
+  onChange,
+  value,
 }) => {
-  const [activeNum, setActiveNum] = useSearchQuery(keyQuery);
+  const [activeNum, setActiveNum] = useSearchQuery();
+
   return (
     <>
       <HeaderRow>
@@ -28,13 +28,10 @@ export const DisplayResult: React.FC<Props> = ({
         <Row>
           <Heading as="h3">
             Izvēleties nepieciešamo{" "}
-            {title.toLowerCase().substring(0, title.length - 1) + "u"}
+            {selectTitle ||
+              title.toLowerCase().substring(0, title.length - 1) + "u"}
           </Heading>
-          <Select
-            onChange={(e) => setActiveNum(+e.target.value)}
-            name={keyQuery}
-            value={activeNum}
-          >
+          <Select onChange={onChange} value={value}>
             {Array.from({ length: options }, (_, index) => index + 1).map(
               (num) => (
                 <option value={num}>{num}</option>
@@ -43,7 +40,6 @@ export const DisplayResult: React.FC<Props> = ({
           </Select>
         </Row>
       </HeaderRow>
-      <Queries activeNumber={activeNum} />
     </>
   );
 };

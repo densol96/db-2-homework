@@ -10,26 +10,15 @@ import {
 import "react-json-view-lite/dist/index.css";
 import { useThemeContext } from "@/context/ThemeContext";
 import Heading from "@/ui/Heading";
-import styled from "styled-components";
 import Script from "@/ui/Script";
+import Group from "@/ui/Group";
 
 type Props = {
   activeNumber: number;
 };
 
-const Group = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  gap: 1rem;
-
-  &:first-of-type {
-    margin-bottom: 3rem;
-  }
-`;
-
 export const Queries: React.FC<Props> = ({ activeNumber }) => {
-  const { script, result, isLoading } = useSqlQuery(activeNumber);
+  const { script, result, description, isLoading } = useSqlQuery(activeNumber);
   const { theme } = useThemeContext();
 
   if (isLoading) return <Spinner />;
@@ -38,6 +27,10 @@ export const Queries: React.FC<Props> = ({ activeNumber }) => {
       <Group>
         <Heading as="h2">Skripts:</Heading>
         <Script theme={theme}>{script}</Script>
+      </Group>
+      <Group>
+        <Heading as="h2">Apraksts:</Heading>
+        <p>{description}</p>
       </Group>
       <Group>
         <Heading as="h2">Rezultāts:</Heading>

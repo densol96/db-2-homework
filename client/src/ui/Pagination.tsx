@@ -2,6 +2,7 @@ import usePagination from "@/features/tables/usePagination";
 import { HiChevronRight, HiChevronLeft } from "react-icons/hi2";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import { FaRegCircle, FaCircle } from "react-icons/fa6";
 
 const StyledPagination = styled.div`
   width: 100%;
@@ -30,6 +31,13 @@ const PaginationButton = styled.button`
   }
 `;
 
+const PageTracker = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+`;
+
 const RESULTS_PER_PAGE = +process.env.REACT_APP_RESULTS_PER_PAGE;
 
 function Pagination({ pagesTotal }) {
@@ -42,6 +50,12 @@ function Pagination({ pagesTotal }) {
       <P>
         Pašlaik skatāties {currentPage}. lapu no {pagesTotal}
       </P>
+      <PageTracker>
+        {Array.from({ length: pagesTotal }, (_, index) => index + 1).map(
+          (pageNum) =>
+            !(pageNum === currentPage) ? <FaRegCircle /> : <FaCircle />
+        )}
+      </PageTracker>
       <Buttons>
         <PaginationButton onClick={prev} disabled={currentPage === 1}>
           <HiChevronLeft />

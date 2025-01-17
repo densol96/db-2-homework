@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import lv.solodeni.server.repository.GeneralRepo;
 import lv.solodeni.server.service.general.IGeneralService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,6 +82,11 @@ public class GeneralController {
     @GetMapping("/procedures/{procedureNum}")
     public ResponseEntity<Object> proceduresController(@PathVariable Integer procedureNum) throws Exception {
         return new ResponseEntity<>(service.getProcedure(procedureNum), HttpStatus.OK);
+    }
+
+    @GetMapping("/procedures/{procedureNum}/call")
+    public ResponseEntity<Object> proceduresControllerCaller(@PathVariable Integer procedureNum) throws Exception {
+        return new ResponseEntity<>(service.callProcedure(procedureNum), HttpStatus.OK);
     }
 
 }

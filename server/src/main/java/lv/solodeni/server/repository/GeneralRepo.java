@@ -11,10 +11,26 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.RequiredArgsConstructor;
 import lv.solodeni.server.exception.InvalidInputException;
 import lv.solodeni.server.exception.InvalidTableNameException;
 import lv.solodeni.server.helper.DataMapper;
+
+enum ProcedureType {
+    FUNCTION(2), PROCEDURE(3);
+
+    private final int procedureNum;
+
+    ProcedureType(int procedureNum) {
+        this.procedureNum = procedureNum;
+    }
+
+    public int getProcedureNum() {
+        return procedureNum;
+    }
+}
 
 @Repository
 @RequiredArgsConstructor
@@ -81,27 +97,29 @@ public class GeneralRepo {
     }
 
     @Transactional
-    public String callProcedure(Integer procedureNum) {
-        template.execute("CALL get_article_rating(1, @result)", (ps) -> ps.execute());
-        template.query("SELECT @result AS result", (rs, intRow) -> {
-            System.out.println(rs.getDouble("result"));
-            return "testing";
-        });
-        return "in testing";
-    }
-
-    private String getProcedureScript(Integer procedureNum) {
-        switch (procedureNum) {
-            case 1:
-                return "CALL get_article_rating(:articleId, :result)";
-            case 2:
-                return "CALL get_article_rating(:articleId, :result)";
-            case 3:
-                return "CALL get_article_rating(:articleId, :result)";
-            default:
-                throw new InvalidInputException("Invalid trigger number. Only 1-3 are available.");
-
+    public Map<String, Object> callProcedure(Integer procedureNum) {
+        // procedureNum: 1 is not callable, 2 is function, 3 is procedure. so this is
+        // sort of hardcoded, but no point to make it more complex when we have only 2
+        // options
+        LinkedHashMap<String, Object> json = new LinkedHashMap<>();
+        if (procedureNum == ProcedureType.FUNCTION.getProcedureNum()) {
+            template.query("SELECT get_most_popular_article() as 'result';", (rs, intRow) -> {
+                String jsonString = rs.getString("result");
+                ObjectMapper objectMapper = new ObjectMapper();
+                try {
+                    json.put("result", objectMapper.readTree(jsonString));
+                } catch (Exception e) {
+                    // json.put("result", null);
+                    System.out.println("Unable to parse jsonString. An enpty map will be returned to the client.");
+                }
+                return null;
+            });
+        } else if (procedureNum == ProcedureType.PROCEDURE.getProcedureNum()) {
+            template.execute("CALL update_all_article_ratings()", (ps) -> ps.execute());
+            json.put("result", "All articles' ratings were updated and available for display in the table.");
         }
+
+        return json;
     }
 
     private String getDbName() {

@@ -10,6 +10,8 @@ import useTables from "./features/tables/useTableNames";
 import { Tabula } from "./pages/Tabula";
 import { Toaster } from "react-hot-toast";
 import { Vaicajumi } from "./pages/Vaicajumi";
+import { Proceduras } from "./pages/Proceduras";
+import { Trigeri } from "./pages/Trigeri";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,6 +40,8 @@ function App() {
                 <Route path=":name" element={<Tabula />} />
               </Route>
               <Route path="queries" element={<Vaicajumi />} />
+              <Route path="procedures" element={<Proceduras />} />
+              <Route path="triggers" element={<Trigeri />} />
             </Route>
           </Routes>
         </BrowserRouter>

@@ -161,6 +161,7 @@ public class GeneralServiceImpl implements IGeneralService {
             Map<String, Object> json = new LinkedHashMap<>();
             json.put("script", script);
             json.put("result", result);
+            json.put("description", getQueryDescription(queryNum));
             return json;
         } catch (Exception e) {
             // error logging will happen in global handler and general message sent to
@@ -180,7 +181,7 @@ public class GeneralServiceImpl implements IGeneralService {
                     .readString(Paths.get(ClassLoader.getSystemResource("db/triggers/" + fileName).toURI()));
             Map<String, Object> json = new LinkedHashMap<>();
             json.put("script", script);
-            json.put("info", getTriggerDescription(triggerNum));
+            json.put("description", getTriggerDescription(triggerNum));
             return json;
         } catch (IOException | URISyntaxException e) {
             // error logging will happen in global handler and general message sent to
@@ -198,15 +199,46 @@ public class GeneralServiceImpl implements IGeneralService {
             String script = Files
                     .readString(Paths.get(ClassLoader.getSystemResource("db/procedures/" + fileName).toURI()));
             Map<String, Object> json = new LinkedHashMap<>();
-            var result = repo.callProcedure(1);
-            System.out.println(result);
             json.put("script", script);
-            json.put("info", getProcedureDescription(procedureNum));
+            json.put("description", getProcedureDescription(procedureNum));
+            json.put("isCallable", isProcedureCallable(procedureNum));
             return json;
         } catch (IOException | URISyntaxException e) {
             // error logging will happen in global handler and general message sent to
             // client
             throw new GeneralException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Map<String, Object> callProcedure(Integer procedureNum) {
+        return repo.callProcedure(procedureNum);
+    }
+
+    private String getQueryDescription(Integer queryNum) {
+        switch (queryNum) {
+            case 1:
+                return "Mērķis — iegūt sarakstu ar rakstiem, kurus uzrakstījis konkrēts autors (bob), sakārtotus pēc nosaukuma un publicēšanas laika.";
+            case 2:
+                return "Mērķis — parādīt, cik rakstus ir uzrakstījis katrs lietotājs, sakārtojot lietotājus pēc uzrakstīto rakstu skaita dilstošā secībā.";
+            case 3:
+                return "Mērķis — atrast lietotājus, kuri vēl nav uzrakstījuši nevienu rakstu.";
+            case 4:
+                return "Mērķis — atrast visus rakstus, kas saistīti ar konkrētu atslēgvārdu (šajā gadījumā \"Database\").";
+            case 5:
+                return "Mērķis — parādīt rakstus ar to vidējo vērtējumu un atsauksmju kopējo skaitu, sakārtojot tos pēc vidējā vērtējuma dilstošā secībā, pēc atsauksmju skaita un tad pēc nosaukuma.";
+            case 6:
+                return "Mērķis — atrast komentāru saturu ar vislielāko patīk skaitu (maksimālo \"like\" vērtību).";
+            case 7:
+                return "Mērķis — atrast 10 populārākos komentārus pēc \"like\" skaita.";
+            case 8:
+                return "Mērķis — noteikt, cik komentārus lietotājs \"alice\" ir atstājis katrā rakstā, un parādīt rakstus sakārtotus pēc komentāru skaita dilstošā secībā.";
+            case 9:
+                return "Mērķis — iegūt vērtējumus un to skaitu konkrētam rakstam ar nosaukumu \"Understanding SQL Joins\", sakārtotus pēc balsojumu skaita dilstošā secībā.";
+            case 10:
+                return "Mērķis — iegūt visus atslēgvārdus (tags), kas saistīti ar rakstu ar nosaukumu \"Understanding SQL Joins\".";
+            default:
+                throw new InvalidInputException("Invalid trigger number. Only 1-3 are available.");
         }
     }
 
@@ -226,14 +258,28 @@ public class GeneralServiceImpl implements IGeneralService {
     private String getProcedureDescription(Integer procedureNum) {
         switch (procedureNum) {
             case 1:
-                return "Šis triggers tiek izveidots, lai pēc ieraksta dzēšanas no users tabulas automātiski ierakstītu dzēsto lietotāju datus users_backup tabulā.";
+                return "Šī procedūra log_trigger tiek izmantota, lai reģistrētu informāciju par konkrētu triggeri (notikumu), kas tiek izpildīts. Procedūra ievieto datus tabulā trigger_logs, saglabājot informāciju par triggera veidu, nosaukumu un laiku.";
             case 2:
-                return "Šis triggers tiek izveidots, lai pirms jauna lietotāja ieraksta pievienošanas users tabulā pārbaudītu, vai role vērtība ir derīga. Ja loma ir admin vai editor, tiek automātiski iestatīts email_is_confirmed uz TRUE, citādi uz FALSE.";
+                return "Šī funkcija get_most_popular_article tiek izmantota, lai atrastu un atgrieztu vispopulārāko rakstu, pamatojoties uz tā vidējo vērtējumu, salīdzinot ar visiem citiem rakstiem.";
             case 3:
-                return "Šis triggers tiek izveidots, lai pēc jauna ieraksta pievienošanas users_articles_ratings tabulā automātiski aprēķinātu un atjauninātu raksta vidējo vērtējumu articles tabulā. Pēc katras jaunas atsauksmes tiek aprēķināts visu atsauksmju skaits un to vērtējumu summa, lai iegūtu jaunu vidējo vērtējumu rakstam.";
+                return "Šī procedūra update_all_article_ratings tiek izmantota, lai atjauninātu visiem rakstiem (articles) to vidējo vērtējumu (rating_average), balstoties uz vērtējumiem no tabulas users_articles_ratings.";
             default:
                 throw new InvalidInputException("Invalid trigger number. Only 1-3 are available.");
         }
+    }
+
+    private boolean isProcedureCallable(Integer procedureNum) {
+        switch (procedureNum) {
+            case 1:
+                return false;
+            case 2:
+                return true;
+            case 3:
+                return true;
+            default:
+                return false;
+        }
+
     }
 
 }

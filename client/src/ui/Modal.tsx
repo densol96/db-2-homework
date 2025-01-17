@@ -43,7 +43,7 @@ const CloseBtn = styled.button`
 
 type Props = {
   children?: React.ReactNode;
-  triggerElement?: React.ReactElement<{ onClick: () => void }>;
+  triggerElement: React.ReactElement<{ onClick: () => void }>;
 };
 
 type ModalValueType = {

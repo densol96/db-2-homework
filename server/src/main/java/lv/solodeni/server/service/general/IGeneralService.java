@@ -23,4 +23,6 @@ public interface IGeneralService {
     Map<String, Object> getTriggerInfo(Integer triggerNum);
 
     Map<String, Object> getProcedure(Integer procedureNum);
+
+    Map<String, Object> callProcedure(Integer procedureNum);
 }

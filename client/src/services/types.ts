@@ -26,4 +26,20 @@ export type SCRIPT = {
 export type QUERY = {
   script: string;
   result: any;
+  description: string;
+};
+
+export type TRIGGER = {
+  script: string;
+  description: string;
+};
+
+export type PROCEDURE = {
+  script: string;
+  description: string;
+  isCallable: boolean;
+};
+
+export type CALL_PROCEDURE = {
+  result: string;
 };

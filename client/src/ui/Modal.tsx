@@ -44,6 +44,7 @@ const CloseBtn = styled.button`
 type Props = {
   children?: React.ReactNode;
   triggerElement: React.ReactElement<{ onClick: () => void }>;
+  style?: object;
 };
 
 type ModalValueType = {
@@ -61,7 +62,7 @@ export const useModalContext = () => {
   return context;
 };
 
-export const Modal: React.FC<Props> = ({ triggerElement, children }) => {
+export const Modal: React.FC<Props> = ({ triggerElement, children, style }) => {
   const [isOpen, setIsOpen] = useState(false);
   const overlay = useRef<HTMLDivElement>(null);
 
@@ -83,8 +84,8 @@ export const Modal: React.FC<Props> = ({ triggerElement, children }) => {
       {isOpen &&
         createPortal(
           <Overlay ref={overlay} onClick={detectOutsideClick}>
-            <Window>
-              <CloseBtn onClick={() => setIsOpen(false)}>
+            <Window style={style}>
+              <CloseBtn style={style} onClick={() => setIsOpen(false)}>
                 <IoMdCloseCircle size={25} />
               </CloseBtn>
               {children}

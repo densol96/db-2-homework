@@ -17,6 +17,7 @@ import {
 } from "react-json-view-lite";
 import "react-json-view-lite/dist/index.css";
 import toast from "react-hot-toast";
+import { FaPlay } from "react-icons/fa";
 
 type Props = {
   activeNumber: number;
@@ -42,12 +43,20 @@ export const Procedures: React.FC<Props> = ({ activeNumber }) => {
       </Group>
       <Group>
         {isCallable && activeNumber === 2 && (
-          <Modal triggerElement={<Button>Run Procedure / Function</Button>}>
+          <Modal
+            style={{ backgroundColor: "white", color: "black" }}
+            triggerElement={
+              <Button>
+                <FaPlay />
+                Run Procedure / Function
+              </Button>
+            }
+          >
             {theme == "dark" ? (
               <JsonView
                 data={result}
                 shouldExpandNode={allExpanded}
-                style={darkStyles}
+                style={defaultStyles}
               />
             ) : (
               <JsonView
@@ -64,7 +73,7 @@ export const Procedures: React.FC<Props> = ({ activeNumber }) => {
               toast.success(<p style={{ textAlign: "center" }}>{result}</p>)
             }
           >
-            Run Procedure / Function
+            <FaPlay /> Run Procedure / Function
           </Button>
         )}
       </Group>
